@@ -1,3 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blush: #fff6f7;
+  --color-petal: #f4c9d4;
+  --color-rose: #d46a86;
+  --color-deep: #6e3144;
+  --color-ink: #4a2432;
+  --color-gold: #c6a07a;
+  --color-leaf: #6e8f72;
+  --color-card: rgba(255, 250, 251, 0.78);
+}
+
 :root {
   --blush: #fff6f7;
   --petal: #f4c9d4;
@@ -6,7 +19,7 @@
   --ink: #4a2432;
   --gold: #c6a07a;
   --leaf: #6e8f72;
-  --card: rgba(255, 250, 251, 0.78);
+  --card: rgba(255, 250, 251, 0.94);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -236,6 +249,12 @@ button:focus-visible {
   transform: translate(-50%, -50%) scale(0.96);
 }
 
+main.is-open .eyebrow,
+main.is-open .guest-name {
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+
 main.is-open .seal-button {
   opacity: 0;
   pointer-events: none;
@@ -244,9 +263,9 @@ main.is-open .seal-button {
 
 .letter-card {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.92);
+  inset: 0;
+  margin: auto;
+  height: fit-content;
   width: calc(100% - 40px);
   max-width: 34rem;
   background: var(--card);
@@ -260,14 +279,9 @@ main.is-open .seal-button {
   opacity: 0;
   pointer-events: none;
   z-index: 20;
-  transition: opacity 1.2s var(--ease) 0.3s, transform 1.2s var(--ease) 0.3s;
 }
 
-main.is-open .letter-card {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-}
+/* letter-card open state handled by motion */
 
 .letter-content {
   display: flex;
@@ -373,11 +387,10 @@ main.is-open .letter-card {
   transform: scale(0.97);
 }
 
-main.is-blooming .letter-card,
 main.is-blooming .stage-initial {
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.85);
+  transform: scale(0.85);
   transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
 }
 
@@ -402,23 +415,18 @@ main.is-blooming #garden {
 
 .final-message {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translateY(16px);
+  inset: 0;
+  margin: auto;
+  height: fit-content;
   text-align: center;
   z-index: 25;
   opacity: 0;
   pointer-events: none;
   width: min(90vw, 32rem);
   padding: 1.5rem;
-  transition: opacity 1.4s var(--ease), transform 1.4s var(--ease);
 }
 
-main.is-settled .final-message {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) translateY(0);
-}
+/* final-message settled state handled by motion */
 
 .final-line1 {
   font-family: 'Cormorant Garamond', Georgia, serif;
