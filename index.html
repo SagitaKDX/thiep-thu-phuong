@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tối nay · Lã Thu Phương</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <svg class="grain-filter-svg" aria-hidden="true">
+    <filter id="grain-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
+    </filter>
+  </svg>
+
+  <main>
+    <div class="bokeh" aria-hidden="true">
+      <span class="bokeh-dot dot-1"></span>
+      <span class="bokeh-dot dot-2"></span>
+      <span class="bokeh-dot dot-3"></span>
+      <span class="bokeh-dot dot-4"></span>
+      <span class="bokeh-dot dot-5"></span>
+      <span class="bokeh-dot dot-6"></span>
+      <span class="bokeh-dot dot-7"></span>
+      <span class="bokeh-dot dot-8"></span>
+      <span class="bokeh-dot dot-9"></span>
+      <span class="bokeh-dot dot-10"></span>
+      <span class="bokeh-dot dot-11"></span>
+      <span class="bokeh-dot dot-12"></span>
+      <span class="bokeh-dot dot-13"></span>
+      <span class="bokeh-dot dot-14"></span>
+    </div>
+
+    <section class="stage-initial" aria-label="Thiệp mời Lã Thu Phương">
+      <p class="eyebrow">một tối · một người</p>
+      <h1 class="guest-name">Lã Thu Phương</h1>
+
+      <div class="rose-container">
+        <svg class="closed-rose" viewBox="0 0 200 260" aria-hidden="true">
+          <defs>
+            <linearGradient id="bud-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#f8d5df" />
+              <stop offset="100%" stop-color="#c45370" />
+            </linearGradient>
+          </defs>
+          <path class="rose-stem" d="M100 110 C 97 150 106 195 94 250" fill="none" stroke="var(--leaf)" stroke-width="2.6" stroke-linecap="round" />
+          <path class="rose-leaf" d="M98 158 C 76 152 68 165 65 175 C 77 177 91 170 97 165" fill="var(--leaf)" />
+          <path class="rose-leaf" d="M101 188 C 120 182 129 191 132 201 C 120 204 107 197 102 192" fill="var(--leaf)" />
+          
+          <path class="bud-petal bud-petal-1" d="M 100 110 C 65 105 60 72 75 48 C 88 38 98 48 100 60 Z" fill="url(#bud-grad)" />
+          <path class="bud-petal bud-petal-2" d="M 100 110 C 135 105 140 72 125 48 C 112 38 102 48 100 60 Z" fill="url(#bud-grad)" />
+          <path class="bud-petal bud-petal-3" d="M 100 110 C 75 102 70 65 84 42 C 95 35 102 45 100 70 Z" fill="url(#bud-grad)" />
+          <path class="bud-petal bud-petal-4" d="M 100 110 C 125 102 130 65 116 42 C 105 35 98 45 100 70 Z" fill="url(#bud-grad)" />
+          <path class="bud-petal bud-petal-5" d="M 100 110 C 88 95 86 58 100 36 C 114 58 112 95 100 110 Z" fill="url(#bud-grad)" />
+
+          <circle class="svg-seal" cx="100" cy="84" r="14" fill="var(--rose)" stroke="var(--gold)" stroke-width="1" />
+        </svg>
+
+        <button id="seal-btn" class="seal-button" type="button">Mở thiệp</button>
+      </div>
+    </section>
+
+    <article class="letter-card" aria-label="Nội dung thư mời">
+      <div class="letter-content">
+        <p class="letter-greeting">Thu Phương,</p>
+        <p class="letter-p1">Tối nay anh không nhắn thêm một câu nữa.</p>
+        <p class="letter-p2">Anh muốn đứng giữa ánh đèn Vincom Royal, giữ một đóa hồng nhạt, và chờ đúng người mang tên em bước tới.</p>
+        
+        <div class="time-block">
+          <span class="time-hour">19:30</span>
+          <span class="time-place">Vincom Mega Mall Royal City</span>
+          <span class="time-address">72A Nguyễn Trãi, Thanh Xuân</span>
+        </div>
+
+        <p class="letter-closing">Nếu em nói có, khu vườn này sẽ nở — chỉ vì em.</p>
+
+        <div class="letter-actions">
+          <button id="confirm-btn" class="confirm-button" type="button">Em đi.</button>
+        </div>
+      </div>
+    </article>
+
+    <canvas id="garden" aria-hidden="true"></canvas>
+
+    <section class="final-message" aria-label="Lời hẹn tối nay">
+      <h2 class="final-line1">Anh sẽ đón em.</h2>
+      <p class="final-line2">Vincom Royal · 19:30 tối nay</p>
+      <p class="final-line3">Cảm ơn em đã cho anh một đóa tối.</p>
+    </section>
+  </main>
+
+  <script src="js/garden.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

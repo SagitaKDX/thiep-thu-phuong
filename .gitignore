@@ -1,2 +1,4 @@
 .DS_Store
-.agy/
+node_modules/
+.next/
+out/
