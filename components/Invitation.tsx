@@ -15,7 +15,7 @@ export function Invitation() {
     setIsOpen(true);
   };
 
-  const playChord = () => {
+  const playPhrase = () => {
     try {
       const AudioCtx =
         window.AudioContext ||
@@ -26,39 +26,81 @@ export function Invitation() {
 
       const schedule = () => {
         try {
-          const notes = [440, 523.25, 659.25];
           const now = ctx.currentTime;
-          const duration = 1.4;
 
           const masterGain = ctx.createGain();
-          masterGain.gain.setValueAtTime(0.0001, now);
-          masterGain.gain.exponentialRampToValueAtTime(0.035, now + 0.04);
-          masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+          masterGain.gain.setValueAtTime(0.07, now);
           masterGain.connect(ctx.destination);
 
+          const delay = ctx.createDelay();
+          delay.delayTime.setValueAtTime(0.23, now);
+
+          const delayFilter = ctx.createBiquadFilter();
+          delayFilter.type = "lowpass";
+          delayFilter.frequency.setValueAtTime(1400, now);
+
+          const feedback = ctx.createGain();
+          feedback.gain.setValueAtTime(0.2, now);
+
+          const wetGain = ctx.createGain();
+          wetGain.gain.setValueAtTime(0.25, now);
+
+          masterGain.connect(delay);
+          delay.connect(delayFilter);
+          delayFilter.connect(feedback);
+          feedback.connect(delay);
+          delayFilter.connect(wetGain);
+          wetGain.connect(ctx.destination);
+
+          const notes = [
+            { freq: 329.63, offset: 0 },
+            { freq: 392, offset: 0.18 },
+            { freq: 493.88, offset: 0.36 },
+            { freq: 587.33, offset: 0.58 },
+          ];
+          const noteDuration = 1.8;
+          const partialMultiples = [1, 2, 3.01, 4.02];
+          const partialGains = [1, 0.4, 0.15, 0.05];
+
           for (let i = 0; i < notes.length; i++) {
-            const freq = notes[i];
+            const { freq, offset } = notes[i];
+            const startTime = now + offset;
+            const stopTime = startTime + noteDuration;
 
-            const oscSine = ctx.createOscillator();
-            oscSine.type = "sine";
-            oscSine.frequency.setValueAtTime(freq, now);
-            oscSine.connect(masterGain);
-            oscSine.start(now);
-            oscSine.stop(now + duration);
+            const noteGain = ctx.createGain();
+            noteGain.gain.setValueAtTime(0.0001, startTime);
+            noteGain.gain.exponentialRampToValueAtTime(0.2, startTime + 0.04);
+            noteGain.gain.exponentialRampToValueAtTime(0.0001, stopTime);
 
-            const oscTri = ctx.createOscillator();
-            oscTri.type = "triangle";
-            oscTri.frequency.setValueAtTime(freq, now);
-            oscTri.connect(masterGain);
-            oscTri.start(now);
-            oscTri.stop(now + duration);
+            const filter = ctx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.setValueAtTime(1600, startTime);
+            filter.frequency.exponentialRampToValueAtTime(800, stopTime);
+
+            noteGain.connect(filter);
+            filter.connect(masterGain);
+
+            for (let p = 0; p < partialMultiples.length; p++) {
+              const osc = ctx.createOscillator();
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(freq * partialMultiples[p], startTime);
+
+              const pGain = ctx.createGain();
+              pGain.gain.setValueAtTime(partialGains[p], startTime);
+
+              osc.connect(pGain);
+              pGain.connect(noteGain);
+
+              osc.start(startTime);
+              osc.stop(stopTime);
+            }
           }
 
           setTimeout(() => {
             try {
               ctx.close();
             } catch (_) {}
-          }, (duration + 0.2) * 1000);
+          }, 3200);
         } catch (_) {}
       };
 
@@ -101,7 +143,7 @@ export function Invitation() {
       }
     }
 
-    playChord();
+    playPhrase();
   };
 
   return (
@@ -143,7 +185,7 @@ export function Invitation() {
           className="stage-initial"
           aria-label="Thiệp mời Lã Thu Phương"
         >
-          <p className="eyebrow text-rose">một tối · một người</p>
+          <p className="eyebrow text-rose">tối nay</p>
           <h1 className="guest-name text-deep">Lã Thu Phương</h1>
 
           <div className="rose-container">
@@ -254,16 +296,53 @@ export function Invitation() {
           }}
         >
           <div className="letter-content">
-            <p className="letter-greeting text-deep">Thu Phương,</p>
-            <p className="letter-p1 text-ink">
-              Tối nay anh không nhắn thêm một câu nữa.
-            </p>
-            <p className="letter-p2 text-ink">
-              Anh muốn đứng giữa ánh đèn Vincom Royal, giữ một đóa hồng nhạt, và
-              chờ đúng người mang tên em bước tới.
-            </p>
+            <motion.p
+              className="letter-greeting text-deep"
+              initial={{ opacity: 0, y: 12 }}
+              animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.28,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              Thu Phương,
+            </motion.p>
+            <motion.p
+              className="letter-p1 text-ink"
+              initial={{ opacity: 0, y: 12 }}
+              animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.39,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              Tối nay anh muốn gặp em.
+            </motion.p>
+            <motion.p
+              className="letter-p2 text-ink"
+              initial={{ opacity: 0, y: 12 }}
+              animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.5,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              19:30 ở Vincom Royal. Mình đi một vòng, ngồi lại nói chuyện. Anh đợi ở sảnh.
+            </motion.p>
 
-            <div className="time-block border-l-rose">
+            <motion.div
+              className="time-block border-l-rose"
+              initial={{ opacity: 0, y: 12 }}
+              animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.61,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
               <span className="time-hour text-deep">19:30</span>
               <span className="time-place text-rose">
                 Vincom Mega Mall Royal City
@@ -271,21 +350,37 @@ export function Invitation() {
               <span className="time-address text-ink">
                 72A Nguyễn Trãi, Thanh Xuân
               </span>
-            </div>
+            </motion.div>
 
-            <p className="letter-closing text-ink">
-              Nếu em nói có, khu vườn này sẽ nở — chỉ vì em.
-            </p>
+            <motion.p
+              className="letter-closing text-ink"
+              initial={{ opacity: 0, y: 12 }}
+              animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+              transition={{
+                duration: 0.7,
+                delay: 0.72,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              Em đi được không?
+            </motion.p>
 
             <div className="letter-actions">
-              <button
+              <motion.button
                 id="confirm-btn"
                 className="confirm-button bg-rose text-blush"
                 type="button"
                 onClick={handleConfirm}
+                initial={{ opacity: 0, y: 12 }}
+                animate={isOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.83,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
-                Em đi.
-              </button>
+                Được, mình đi.
+              </motion.button>
             </div>
           </div>
         </motion.article>
@@ -306,11 +401,9 @@ export function Invitation() {
             pointerEvents: isSettled ? "auto" : "none",
           }}
         >
-          <h2 className="final-line1 text-deep">Anh sẽ đón em.</h2>
-          <p className="final-line2 text-rose">Vincom Royal · 19:30 tối nay</p>
-          <p className="final-line3 text-ink">
-            Cảm ơn em đã cho anh một đóa tối.
-          </p>
+          <h2 className="final-line1 text-deep">Vậy tối nay gặp nhau.</h2>
+          <p className="final-line2 text-rose">Vincom Royal · 19:30</p>
+          <p className="final-line3 text-ink">Anh đứng ở sảnh.</p>
         </motion.section>
       </main>
     </>

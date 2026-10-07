@@ -276,9 +276,51 @@ main.is-open .seal-button {
   box-shadow: 0 16px 40px -10px rgba(110, 49, 68, 0.12), 0 4px 18px rgba(212, 106, 134, 0.08);
   padding: clamp(1.5rem, 5vw, 2.5rem);
   box-sizing: border-box;
+  overflow: hidden;
   opacity: 0;
   pointer-events: none;
   z-index: 20;
+}
+
+.letter-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.05) 80%,
+    transparent 100%
+  );
+  transform: translateX(-200%) rotate(25deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+main.is-open .letter-card::after {
+  animation: sheen 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.45s 1 forwards;
+}
+
+@keyframes sheen {
+  0% {
+    transform: translateX(-200%) rotate(25deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(400%) rotate(25deg);
+    opacity: 0;
+  }
 }
 
 /* letter-card open state handled by motion */
@@ -483,5 +525,10 @@ main.is-blooming #garden {
 
   main.is-settled .final-message {
     transition: none !important;
+  }
+
+  .letter-card::after {
+    animation: none !important;
+    display: none !important;
   }
 }
