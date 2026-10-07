@@ -249,7 +249,7 @@ export function bloom(
         const prog = Math.min(1, roseTime / 0.9);
         const scale = easeOutBack(prog);
         const rad = Math.max(0, rose.targetRadius * scale);
-        drawRose(ctx, rx, ry, rad, rose.baseAngle);
+        drawRose(ctx, rx, ry, rad, rose.baseAngle + t * 0.12);
       }
     }
 
@@ -275,10 +275,10 @@ export function bloom(
       if (!pt.recycled) {
         const burstFade = Math.exp(-age * 1.8);
         const burstDist = (1 - burstFade) * 0.9;
-        px = (W / 2) + pt.vx0 * burstDist + Math.sin(age * pt.swayFreq + pt.swayPhase) * pt.swayAmp;
+        px = (W / 2) + pt.vx0 * burstDist + Math.sin(age * pt.swayFreq + pt.swayPhase) * pt.swayAmp + Math.sin(t * 0.55 + pt.swayPhase) * 16;
         py = (H / 2) + pt.vy0 * burstDist + age * pt.floatSpeed;
       } else {
-        px = pt.x + Math.sin(age * pt.swayFreq + pt.swayPhase) * pt.swayAmp;
+        px = pt.x + Math.sin(age * pt.swayFreq + pt.swayPhase) * pt.swayAmp + Math.sin(t * 0.55 + pt.swayPhase) * 16;
         py = pt.y + age * pt.floatSpeed;
       }
 
